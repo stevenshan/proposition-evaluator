@@ -19,7 +19,7 @@ class proposition:
 		self._formula = text
 		self._variables = variables
 		self._formulas = formulas
-	
+
 	@staticmethod
 	def process_special_chars(text):
 		text = [ord(x) for x in text]
@@ -27,7 +27,7 @@ class proposition:
 		i = 0
 		while i < len(text):
 			unit = text[i]
-	
+
 			map = {
 				172: "not",
 				8743: "and",
@@ -44,7 +44,7 @@ class proposition:
 				formula += chr(unit)
 			i += 1
 		return formula
-	
+
 	def display_truth_table (self):
 		variables = self._variables
 		def p_row (vars):
@@ -56,7 +56,7 @@ class proposition:
 				row += " ".join(["" for i in range(0, 1+int(math.floor(l)))]) + ("1" if proposition.evaluate(f, vars) == "TRUE" else "0") + " ".join(["" for i in range(0, 1+int(math.ceil(l)))]) + proposition._column_char
 				j += 1
 			print(row)
-			
+
 		row = proposition._column_char
 		separator = proposition._separator_char
 		lengths = []
@@ -68,7 +68,7 @@ class proposition:
 			row += " ".join(["" for i in range(0, 1+int(math.floor(l)))]) + x + " ".join(["" for i in range(0, 1+int(math.ceil(l)))]) + proposition._column_char
 			separator += proposition._separator_char.join(["" for i in range(0, 2+m)])
 		print(separator + "\n" + (row) + "\n" + separator)
-				
+
 		def rec (i = 0, arr = {}):
 			if i + 1 < len(self._variables):
 				arr[self._variables[i]] = False
@@ -81,24 +81,24 @@ class proposition:
 				arr[self._variables[i]] = True
 				p_row(arr)
 		rec()
-		
+
 		print(separator)
-		
+
 	def display_strict_format (self):
 		print("Original Formula:  " + self._formula)
 		print("Strict format   :  " + self.format_strict(self._formula))
-		
+
 	def display_properties (self):
 		print("Original Formula:  " + self._formula)
 		print("Variables:         " + str(self._variables))
 		print("Subformula:        " + str(self._formulas))
-	
+
 	display_options = {
 		"Calculate truth table": display_truth_table,
 		"Display strict format": display_strict_format,
 		"Display properties": display_properties
 	}
-	
+
 	def display (self, option):
 		if option in self.display_options:
 			return self.display_options[option](self)
@@ -111,13 +111,13 @@ class proposition:
 		def next(self):
 			self.counter += 1
 			return int(self.counter / 2)
-	
+
 	rand = 0
 	@staticmethod
 	def get_id ():
 		proposition.rand += 1
 		return proposition.rand
-		
+
 	class logic:
 		@staticmethod
 		def _not (p1):
@@ -140,7 +140,7 @@ class proposition:
 		@staticmethod
 		def _nand(p1, p2):
 			return False if (p1 is True and p2 is True) else True
-	
+
 	operations = {
 		"#not": logic._not,
 		"and": logic._and,
@@ -158,7 +158,7 @@ class proposition:
 		not_found = False
 		parenthesis_index = 0
 		sub = ""
-		
+
 		i = 0
 		while i < len(formula):
 			unit = formula[i]
@@ -175,21 +175,21 @@ class proposition:
 			elif not_found == 1 and re.match("[a-z]", unit):
 				result.append("not " + unit)
 				not_found = 0
-					
+
 			if parenthesis_index > 0 and (parenthesis_index != 1 or unit != "("):
 				sub += unit
 			elif i + 3 < len(formula) and parenthesis_index == 0 and formula[i:i+4] == "not ":
 				not_found = 1
-				i += 3	
-			
+				i += 3
+
 			i += 1
-		
+
 		if parenthesis_index != 0:
 			raise ValueError("Error: Unmatched parenthesis")
-			
+
 		result.append(formula if negate is False else ("not (" + formula + ")"))
 		result = [proposition.clean(x) for x in result]
-		
+
 		i = 0
 		while i < len(result) - 1:
 			j = i + 1
@@ -203,15 +203,15 @@ class proposition:
 					break
 				j += 1
 			i += 1
-		
+
 		return result
-	
+
 	@staticmethod
 	def format_add (map, x):
 		i = str(proposition.get_id())
 		map[i] = x
 		return i
-		
+
 	@staticmethod
 	def strip_outer_parenthesis (str):
 		if str[0] != "(":
@@ -229,18 +229,18 @@ class proposition:
 			else:
 				return str[1:-1]
 			i += 1
-			
+
 	@staticmethod
 	def remove_duplicate_parenthesis (formula):
 		dio = []
 		dic = []
 		pairs = {}
-	
+
 		index = -1
 		count = 0
 		found = False
 		forward = -1
-		
+
 		starts = []
 		ends = []
 		for i in range(0, len(formula)):
@@ -251,17 +251,17 @@ class proposition:
 				index = i
 				found = True
 				forward = True
-				
+
 				count += 1
 				starts.append([count, i])
-				
+
 			elif unit == ")":
 				if found == True and forward == False:
 					dic.append(i)
 				index = i
 				found = True
 				forward = False
-				
+
 				ends.append([count, i])
 				count -= 1
 			elif unit != " ":
@@ -282,7 +282,7 @@ class proposition:
 # 		print("pairs: ", pairs
 # 		print("dio: ", dio
 # 		print("dic: ", dic
-# 		print(" ".join(["%02d" % (i,) for i in range(0, len(formula))])	
+# 		print(" ".join(["%02d" % (i,) for i in range(0, len(formula))])
 # 		print(" ".join([i + " " for i in formula])
 
 		for x in dio:
@@ -297,7 +297,7 @@ class proposition:
 				if i + 1 < len(starts):
 					i = pairs[starts[i+1][1]]
 					j = 0
-					
+
 					while j < len(ends_bk) and ends_bk[j][1] != partner:
 						j += 1
 
@@ -305,9 +305,9 @@ class proposition:
 						flag = True
 				if flag is True:
 					formula = formula[0:x] + " " + formula[x+1:partner] + " " + formula[partner+1:]
-				
+
 		return formula
-		
+
 	@staticmethod
 	def remove_empty_parenthesis (formula):
 		flag = True
@@ -332,11 +332,11 @@ class proposition:
 					found = False
 				i += 1
 		return formula
-		
+
 	@staticmethod
 	def remove_spaces (formula):
 		return " ".join(re.findall("[^ ]+", formula))
-		
+
 	@staticmethod
 	def clean (formula):
 		map = [
@@ -347,7 +347,7 @@ class proposition:
 		i = proposition.iter()
 		c = lambda x: c(map[i.next()](x)) if i.next() < len(map) else x
 		return c(formula)
-		
+
 	@staticmethod
 	def format_strict (formula):
 		map = {}
@@ -421,7 +421,7 @@ class proposition:
 									j -= 1
 								j += 1
 							end = j
-	
+
 							j = i - len(op) - 2
 							space_found = False
 							alphanum_found = False
@@ -443,9 +443,9 @@ class proposition:
 			list = generate_list()
 		e = proposition.clean(formula)
 		if len(e) == 1:
-			return "( " + e + " )" 
+			return "( " + e + " )"
 		return e
-		
+
 	@staticmethod
 	def evaluate_connective (command, p1, p2 = False):
 		key = ("#" + command) if ("#" + command) in proposition.operations else command
@@ -453,11 +453,11 @@ class proposition:
 		if p2 is False:
 			if command == "":
 				return p1
-			return proposition.operations[key](p1) 
+			return proposition.operations[key](p1)
 		else:
 			p2 = True if p2 == "TRUE" else False
-			return proposition.operations[key](p1, p2) 
-	
+			return proposition.operations[key](p1, p2)
+
 	@staticmethod
 	def evaluate (formula, vars):
 		def ev (p):
@@ -467,7 +467,7 @@ class proposition:
 				else:
 					p = "TRUE" if vars[p] is True else "FALSE"
 			return p
-		
+
 		formula = proposition.format_strict(formula.lower())
 		i = formula.find(")")
 		while i != -1:
@@ -497,8 +497,7 @@ class proposition:
 			formula = formula[0:j] + e + formula[i+1:]
 			i = formula.find(")")
 		return formula
- 
-user_input = input("Proposition: ")
-prop = proposition(user_input, False)
-prop.display("Calculate truth table")
 
+user_input = input("Proposition: ")
+prop = proposition(user_input, True)
+prop.display("Calculate truth table")
