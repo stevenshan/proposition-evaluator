@@ -10,7 +10,6 @@ class proposition:
 
 	def __init__ (self, text, extended = False):
 		text = proposition.process_special_chars(text.lower())
-		print("After:", text)
 		variables = sorted(set(re.findall(r"\b([a-z])\b", text)))
 		formulas = list(variables)
 		f = proposition.split(text if extended is False else proposition.format_strict(text))
