@@ -12,8 +12,8 @@ class proposition:
 		text = proposition.process_special_chars(text.lower())
 		variables = sorted(set(re.findall(r"\b([a-z])\b", text)))
 		formulas = list(variables)
-		f = proposition.split(text if extended is False else proposition.format_strict(text))
-		f = [text]
+		f = proposition.split([text] if extended is False else proposition.format_strict(text))
+		print("Interpreted Input: ", proposition.format_strict(text))
 		formulas.extend(f)
 		self._formula = text
 		self._variables = variables
