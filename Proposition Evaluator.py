@@ -1,13 +1,13 @@
 import re
 import math
 
-
+# Includes methods for analyzing class and output settings
 class proposition:
 
-    _minimum_row_width = 5
-    _row_padding = 2
-    _separator_char = "#"
-    _column_char = "#"
+    _minimum_row_width = 5 # Width for output of cells in truth table
+    _row_padding = 2 # Default left and right padding in each cell 
+    _separator_char = "#" # Character to use to construct horizontal borders 
+    _column_char = "#" # Character to use between cells
 
     def __init__(self, text, extended=False):
         text = proposition.process_special_chars(text.lower())
@@ -553,7 +553,13 @@ class proposition:
             i = formula.find(")")
         return formula
 
-
+# Request user input for proposition
 user_input = input("Proposition: ")
+
+# Process proposition
+# Class constructor automatically reads proposition
+# and generates truth table
 prop = proposition(user_input, True)
+
+# Call method to print truth table
 prop.display("Calculate truth table")
