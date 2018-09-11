@@ -166,7 +166,9 @@ class proposition:
         "xor": logic._xor,
         "implies": logic._implies,
         "biimplies": logic._biimplies,
-        "nand": logic._nand
+        "nand": logic._nand,
+        "|": logic._or,
+        "&":  logic._and,
     }
     operations_names = [
         "#not",
@@ -175,7 +177,9 @@ class proposition:
         "xor",
         "implies",
         "biimplies",
-        "nand"]
+        "nand",
+        "|",
+        "&"]
 
     @staticmethod
     def split(formula, negate=False):
